@@ -37,6 +37,7 @@ target_sources(astrodb-base PUBLIC
 
 if (BUILD_SQLITE3_DB)
   target_sources(astrodb-base PRIVATE
+    sqlite3/sqlite3cameratable.h sqlite3/sqlite3cameratable.cpp
     sqlite3/sqlite3database.cpp
   )
   target_sources(astrodb-base PUBLIC
