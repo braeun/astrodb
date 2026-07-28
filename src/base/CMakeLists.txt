@@ -39,6 +39,9 @@ if (BUILD_SQLITE3_DB)
   target_sources(astrodb-base PRIVATE
     sqlite3/sqlite3cameratable.h sqlite3/sqlite3cameratable.cpp
     sqlite3/sqlite3database.cpp
+    sqlite3/sqlite3objecttable.h sqlite3/sqlite3objecttable.cpp
+    sqlite3/sqlite3observertable.h sqlite3/sqlite3observertable.cpp
+    sqlite3/sqlite3telescopetable.h sqlite3/sqlite3telescopetable.cpp
   )
   target_sources(astrodb-base PUBLIC
     FILE_SET HEADERS TYPE HEADERS BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/.." FILES
