@@ -18,7 +18,6 @@ add_library(astrodb-base SHARED
   json/jsonobservertable.h json/jsonobservertable.cpp
   json/jsontelescopetable.h json/jsontelescopetable.cpp
 )
-
 add_library(astrodb::base ALIAS astrodb-base)
 
 target_sources(astrodb-base PUBLIC
@@ -57,7 +56,7 @@ set_target_properties(astrodb-base
       SOVERSION
         ${CMAKE_PROJECT_VERSION_MAJOR} #.${CMAKE_PROJECT_VERSION_MINOR}
       DEFINE_SYMBOL
-        LIBIMCACORE
+        LIBASTRODB
 )
 
 

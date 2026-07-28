@@ -54,6 +54,8 @@ if (SQLite3_FOUND)
   endif()
 endif()
 
+find_package(Qt6 COMPONENTS Sql)
+
 #-----------------------------------------------------------------------------
 # OPTIONS
 #-----------------------------------------------------------------------------
@@ -61,6 +63,7 @@ endif()
 #-----------------------------------------------------------------------------
 
 CMAKE_DEPENDENT_OPTION(BUILD_SQLITE3_DB "build sqlite3 based database" ON "SQLITE3_FOUND" OFF)
+CMAKE_DEPENDENT_OPTION(BUILD_QT_DB "build Qt based database" ON "Qt6_FOUND" OFF)
 
 #-----------------------------------------------------------------------------
 # COMPILE DEFINITIONS
@@ -71,6 +74,10 @@ CMAKE_DEPENDENT_OPTION(BUILD_SQLITE3_DB "build sqlite3 based database" ON "SQLIT
 #-----------------------------------------------------------------------------
 
 add_subdirectory(src/base)
+
+if (BUILD_QT_DB)
+  add_subdirectory(src/qt/)
+endif()
 
 #-----------------------------------------------------------------------------
 # INSTALL
