@@ -2,21 +2,37 @@
 
 namespace astrodb {
 
-Telescope::Telescope() {}
+Telescope::Telescope():
+  id(-1),
+  focalLength(0),
+  aperture(0)
+{
+}
 
-Telescope::Telescope(const std::string& model, double f, double d):
+Telescope::Telescope(const QString& model, double f, double d, int64_t id):
+  id(id),
   model(model),
   focalLength(f),
   aperture(d)
 {
 }
 
-const std::string& Telescope::getModel() const
+int64_t Telescope::getId() const
+{
+  return id;
+}
+
+void Telescope::setId(int64_t i)
+{
+  id = i;
+}
+
+const QString& Telescope::getModel() const
 {
   return model;
 }
 
-void Telescope::setModel(const std::string& m)
+void Telescope::setModel(const QString& m)
 {
   model = m;
 }
@@ -43,7 +59,7 @@ void Telescope::setAperture(double a)
 
 Telescope::operator bool() const
 {
-  return !model.empty();
+  return !model.isEmpty();
 }
 
 

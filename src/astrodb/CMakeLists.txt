@@ -1,22 +1,30 @@
 
-add_library(astrodb-base SHARED
+add_library(astrodb-base STATIC
   cameratable.cpp
   database.cpp
+  infosnippettable.cpp
   libastrodb-base.pc.in
   objecttable.cpp
   observertable.cpp
   telescopetable.cpp
   data/camera.cpp
+  data/infosnippet.cpp
   data/object.cpp
   data/observer.cpp
   data/telescope.cpp
-  json/jsoncameratable.h json/jsoncameratable.cpp
-  json/jsondatabase.cpp
-  json/json.hpp
-  json/json_fwd.hpp
-  json/jsonobjecttable.h json/jsonobjecttable.cpp
-  json/jsonobservertable.h json/jsonobservertable.cpp
-  json/jsontelescopetable.h json/jsontelescopetable.cpp
+  # memory/jsoncameratable.h memory/jsoncameratable.cpp
+  memory/jsondatabase.cpp
+  memory/json.hpp
+  memory/json_fwd.hpp
+  # memory/jsoninfosnippettable.h memory/jsoninfosnippettable.cpp
+  # memory/jsonobjecttable.h memory/jsonobjecttable.cpp
+  # memory/jsonobservertable.h memory/jsonobservertable.cpp
+  # memory/jsontelescopetable.h memory/jsontelescopetable.cpp
+  memory/memorycameratable.h memory/memorycameratable.cpp
+  memory/memoryinfosnippettable.h memory/memoryinfosnippettable.cpp
+  memory/memoryobjecttable.h memory/memoryobjecttable.cpp
+  memory/memoryobservertable.h memory/memoryobservertable.cpp
+  memory/memorytelescopetable.h memory/memorytelescopetable.cpp
 )
 
 add_library(astrodb::base ALIAS astrodb-base)
@@ -25,14 +33,20 @@ target_sources(astrodb-base PUBLIC
   FILE_SET HEADERS TYPE HEADERS BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/.." FILES
   cameratable.h
   database.h
+  infosnippettable.h
   objecttable.h
   observertable.h
   telescopetable.h
   data/camera.h
+  data/infosnippet.h
   data/object.h
   data/observer.h
   data/telescope.h
-  json/jsondatabase.h
+  memory/jsondatabase.h
+)
+
+target_link_libraries(astrodb-base
+  PRIVATE Qt::Sql
 )
 
 if (BUILD_SQLITE3_DB)

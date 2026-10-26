@@ -3,6 +3,7 @@
 namespace astrodb {
 
 Camera::Camera():
+  id(-1),
   model(""),
   width(0),
   height(0),
@@ -15,7 +16,8 @@ Camera::Camera():
 
 }
 
-Camera::Camera(const std::string& model, int width, int height):
+Camera::Camera(const QString& model, int width, int height, int64_t id):
+  id(id),
   model(model),
   width(width),
   height(height),
@@ -27,12 +29,22 @@ Camera::Camera(const std::string& model, int width, int height):
 {
 }
 
-const std::string& Camera::getModel() const
+int64_t Camera::getId() const
+{
+  return id;
+}
+
+void Camera::setId(int64_t i)
+{
+  id = i;
+}
+
+const QString& Camera::getModel() const
 {
   return model;
 }
 
-void Camera::setModel(const std::string& newModel)
+void Camera::setModel(const QString& newModel)
 {
   model = newModel;
 }
@@ -109,7 +121,7 @@ void Camera::setBpp(int newBpp)
 
 Camera::operator bool() const
 {
-  return !model.empty(); // && width > 0 && height > 0;
+  return !model.isEmpty(); // && width > 0 && height > 0;
 }
 
 } // namespace astrodb
