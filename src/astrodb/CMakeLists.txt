@@ -12,14 +12,9 @@ add_library(astrodb-base STATIC
   data/object.cpp
   data/observer.cpp
   data/telescope.cpp
-  # memory/jsoncameratable.h memory/jsoncameratable.cpp
   memory/jsondatabase.cpp
   memory/json.hpp
   memory/json_fwd.hpp
-  # memory/jsoninfosnippettable.h memory/jsoninfosnippettable.cpp
-  # memory/jsonobjecttable.h memory/jsonobjecttable.cpp
-  # memory/jsonobservertable.h memory/jsonobservertable.cpp
-  # memory/jsontelescopetable.h memory/jsontelescopetable.cpp
   memory/memorycameratable.h memory/memorycameratable.cpp
   memory/memoryinfosnippettable.h memory/memoryinfosnippettable.cpp
   memory/memoryobjecttable.h memory/memoryobjecttable.cpp
