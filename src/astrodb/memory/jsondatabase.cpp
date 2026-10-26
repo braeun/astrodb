@@ -10,7 +10,7 @@
 
 namespace astrodb {
 
-JsonDatabase::JsonDatabase(const QString& filename):
+JsonDatabase::JsonDatabase(const std::string& filename):
   filename(filename)
 {
   cameraTable = std::make_unique<MemoryCameraTable>();
@@ -58,20 +58,20 @@ TelescopeTable* JsonDatabase::getTelescopeTable()
 
 bool JsonDatabase::load()
 {
-  if (filename.isDetached() || !std::filesystem::exists(filename.toStdString()))
+  if (!std::filesystem::exists(filename))
   {
 //    throw std::runtime_error("File '"+filename.toStdString()+"' not found");
     return false;
   }
-  std::ifstream is(filename.toStdString());
+  std::ifstream is(filename);
   nlohmann::json json = nlohmann::json::parse(is);
   is.close();
   if (json.contains("cameras"))
   {
     for (const auto& j : json.at("cameras"))
     {
-      QString model = QString::fromStdString(j.value("model",""));
-      if (!model.isEmpty())
+      std::string model = j.value("model","");
+      if (!model.empty())
       {
         int w = j.value("width",0);
         int h = j.value("height",0);
@@ -89,9 +89,9 @@ bool JsonDatabase::load()
   {
     for (const auto& j : json.at("infos"))
     {
-      QString key = QString::fromStdString(j.value("key",""));
-      QString context = QString::fromStdString(j.value("context",""));
-      QString text = QString::fromStdString(j.value("text",""));
+      std::string key = j.value("key","");
+      std::string context = j.value("context","");
+      std::string text = j.value("text","");
       InfoSnippet s(key,context,text);
       infoSnippetTable->add(s);
     }
@@ -100,8 +100,8 @@ bool JsonDatabase::load()
   {
     for (const auto& j : json.at("objects"))
     {
-      QString name = QString::fromStdString(j.value("name",""));
-      if (!name.isEmpty())
+      std::string name = j.value("name","");
+      if (!name.empty())
       {
         Object o(name);
         objectTable->add(o);
@@ -112,8 +112,8 @@ bool JsonDatabase::load()
   {
     for (const auto& j : json.at("observers"))
     {
-      QString name = QString::fromStdString(j.value("name",""));
-      if (!name.isEmpty())
+      std::string name = j.value("name","");
+      if (!name.empty())
       {
         Observer o(name);
         observerTable->add(o);
@@ -124,8 +124,8 @@ bool JsonDatabase::load()
   {
     for (const auto& j : json.at("telescopes"))
     {
-      QString model = QString::fromStdString(j.value("model",""));
-      if (!model.isEmpty())
+      std::string model = j.value("model","");
+      if (!model.empty())
       {
         double f = j.value("f",0.0);
         double d = j.value("d",0.0);
@@ -146,7 +146,7 @@ bool JsonDatabase::save()
   for (const auto& v : cameraTable->getAll())
   {
     nlohmann::json js;
-    js["model"] = v.getModel().toStdString();
+    js["model"] = v.getModel();
     js["width"] = v.getWidth();
     js["height"] = v.getHeight();
     js["pixelwidth"] = v.getPixelWidth();
@@ -161,9 +161,9 @@ bool JsonDatabase::save()
   for (const auto& v : infoSnippetTable->getSnippets("",""))
   {
     nlohmann::json js;
-    js["key"] = v.getKey().toStdString();
-    js["context"] = v.getContext().toStdString();
-    js["text"] = v.getText().toStdString();
+    js["key"] = v.getKey();
+    js["context"] = v.getContext();
+    js["text"] = v.getText();
     ji.push_back(js);
   }
   json["infos"] = ji;
@@ -171,7 +171,7 @@ bool JsonDatabase::save()
   for (const auto& v : objectTable->getAll())
   {
     nlohmann::json js;
-    js["name"] = v.getName().toStdString();
+    js["name"] = v.getName();
     jobj.push_back(js);
   }
   json["objects"] = jobj;
@@ -179,7 +179,7 @@ bool JsonDatabase::save()
   for (const auto& v : observerTable->getAll())
   {
     nlohmann::json js;
-    js["name"] = v.getName().toStdString();
+    js["name"] = v.getName();
     jobs.push_back(js);
   }
   json["observers"] = jobs;
@@ -187,13 +187,13 @@ bool JsonDatabase::save()
   for (const auto& v : telescopeTable->getAll())
   {
     nlohmann::json js;
-    js["model"] = v.getModel().toStdString();
+    js["model"] = v.getModel();
     js["f"] = v.getFocalLength();
     js["d"] = v.getAperture();
     jt.push_back(js);
   }
   json["telescopes"] = jt;
-  std::ofstream s(filename.toStdString());
+  std::ofstream s(filename);
   if (!s.fail())
   {
     s << std::setw(2) << json;

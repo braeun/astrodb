@@ -12,25 +12,25 @@ public:
   MemoryTelescopeTable();
   ~MemoryTelescopeTable();
 
-  virtual bool contains(const QString& name) override;
+  virtual bool contains(const std::string& name) override;
 
-  virtual std::vector<QString> getNameList() override;
+  virtual std::vector<std::string> getNameList() override;
 
   virtual std::vector<Telescope> getAll() override;
 
-  virtual Telescope get(const QString& name) override;
+  virtual Telescope get(const std::string& name) override;
 
   virtual bool add(Telescope c) override;
 
   virtual bool update(const Telescope& c) override;
 
-  virtual bool remove(const QString& name) override;
+  virtual bool remove(const std::string& name) override;
 
   virtual bool remove(int64_t id) override;
 
 private:
   int64_t id;
-  std::map<QString,Telescope> data;
+  std::map<std::string,Telescope> data;
 
 };
 

@@ -7,7 +7,7 @@ Observer::Observer():
 {
 }
 
-Observer::Observer(const QString& name, int64_t id):
+Observer::Observer(const std::string& name, int64_t id):
   id(id),
   name(name)
 {
@@ -23,19 +23,19 @@ void Observer::setId(int64_t i)
   id = i;
 }
 
-const QString& Observer::getName() const
+const std::string& Observer::getName() const
 {
   return name;
 }
 
-void Observer::setName(const QString& n)
+void Observer::setName(const std::string& n)
 {
   name = n;
 }
 
 Observer::operator bool() const
 {
-  return !name.isEmpty();
+  return !name.empty();
 }
 
 } // namespace astrodb

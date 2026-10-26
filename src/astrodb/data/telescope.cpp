@@ -9,7 +9,7 @@ Telescope::Telescope():
 {
 }
 
-Telescope::Telescope(const QString& model, double f, double d, int64_t id):
+Telescope::Telescope(const std::string& model, double f, double d, int64_t id):
   id(id),
   model(model),
   focalLength(f),
@@ -27,12 +27,12 @@ void Telescope::setId(int64_t i)
   id = i;
 }
 
-const QString& Telescope::getModel() const
+const std::string& Telescope::getModel() const
 {
   return model;
 }
 
-void Telescope::setModel(const QString& m)
+void Telescope::setModel(const std::string& m)
 {
   model = m;
 }
@@ -59,7 +59,7 @@ void Telescope::setAperture(double a)
 
 Telescope::operator bool() const
 {
-  return !model.isEmpty();
+  return !model.empty();
 }
 
 

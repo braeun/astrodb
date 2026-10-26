@@ -2,7 +2,7 @@
 #define ASTRODB_OBJECT_H
 
 #include <cstdint>
-#include <QString>
+#include <string>
 
 namespace astrodb {
 
@@ -10,21 +10,21 @@ class Object
 {
 public:
   Object();
-  Object(const QString& name, int64_t id=-1);
+  Object(const std::string& name, int64_t id=-1);
 
   int64_t getId() const;
 
   void setId(int64_t i);
 
-  const QString& getName() const;
+  const std::string& getName() const;
 
-  void setName(const QString& n);
+  void setName(const std::string& n);
 
   explicit operator bool() const;
 
 private:
   int64_t id;
-  QString name;
+  std::string name;
 };
 
 } // namespace astrodb

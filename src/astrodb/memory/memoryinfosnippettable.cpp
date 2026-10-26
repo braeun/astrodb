@@ -11,9 +11,9 @@ MemoryInfoSnippetTable::~MemoryInfoSnippetTable()
 {
 }
 
-std::set<QString> MemoryInfoSnippetTable::getKeys()
+std::set<std::string> MemoryInfoSnippetTable::getKeys()
 {
-  std::set<QString> keys;
+  std::set<std::string> keys;
   for (const InfoSnippet& s : data)
   {
     keys.insert(s.getKey());
@@ -21,10 +21,10 @@ std::set<QString> MemoryInfoSnippetTable::getKeys()
   return keys;
 }
 
-std::set<QString> MemoryInfoSnippetTable::getKeys(const QString& context)
+std::set<std::string> MemoryInfoSnippetTable::getKeys(const std::string& context)
 {
-  if (context.isEmpty()) return getKeys();
-  std::set<QString> keys;
+  if (context.empty()) return getKeys();
+  std::set<std::string> keys;
   for (const InfoSnippet& s : data)
   {
     if (s.getContext() == context)
@@ -35,9 +35,9 @@ std::set<QString> MemoryInfoSnippetTable::getKeys(const QString& context)
   return keys;
 }
 
-std::set<QString> MemoryInfoSnippetTable::getContexts()
+std::set<std::string> MemoryInfoSnippetTable::getContexts()
 {
-  std::set<QString> contexts;
+  std::set<std::string> contexts;
   for (const InfoSnippet& s : data)
   {
     contexts.insert(s.getKey());
@@ -45,10 +45,10 @@ std::set<QString> MemoryInfoSnippetTable::getContexts()
   return contexts;
 }
 
-std::set<QString> MemoryInfoSnippetTable::getContexts(const QString& key)
+std::set<std::string> MemoryInfoSnippetTable::getContexts(const std::string& key)
 {
-  if (key.isEmpty()) return getContexts();
-  std::set<QString> contexts;
+  if (key.empty()) return getContexts();
+  std::set<std::string> contexts;
   for (const InfoSnippet& s : data)
   {
     if (s.getKey() == key)
@@ -59,12 +59,12 @@ std::set<QString> MemoryInfoSnippetTable::getContexts(const QString& key)
   return contexts;
 }
 
-std::vector<InfoSnippet> MemoryInfoSnippetTable::getSnippets(const QString& key, const QString& context)
+std::vector<InfoSnippet> MemoryInfoSnippetTable::getSnippets(const std::string& key, const std::string& context)
 {
   std::vector<InfoSnippet> list;
   for (const InfoSnippet& s : data)
   {
-    if ((key.isEmpty() || s.getKey() == key) && (context.isEmpty() || s.getContext() == context))
+    if ((key.empty() || s.getKey() == key) && (context.empty() || s.getContext() == context))
     {
       list.push_back(s);
     }

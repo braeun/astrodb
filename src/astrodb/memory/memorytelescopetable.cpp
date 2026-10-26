@@ -1,5 +1,5 @@
 #include "memorytelescopetable.h"
-#include <QDateTime>
+#include <chrono>
 
 namespace astrodb {
 
@@ -12,14 +12,14 @@ MemoryTelescopeTable::~MemoryTelescopeTable()
 {
 }
 
-bool MemoryTelescopeTable::contains(const QString& name)
+bool MemoryTelescopeTable::contains(const std::string& name)
 {
   return data.find(name) != data.end();
 }
 
-std::vector<QString> MemoryTelescopeTable::getNameList()
+std::vector<std::string> MemoryTelescopeTable::getNameList()
 {
-  std::vector<QString> keys;
+  std::vector<std::string> keys;
   for (const auto& [k, v] : data)
   {
     keys.push_back(k);
@@ -37,7 +37,7 @@ std::vector<Telescope> MemoryTelescopeTable::getAll()
   return list;
 }
 
-Telescope MemoryTelescopeTable::get(const QString& name)
+Telescope MemoryTelescopeTable::get(const std::string& name)
 {
   if (data.find(name) != data.end()) return data.at(name);
   return Telescope();
@@ -48,9 +48,11 @@ bool MemoryTelescopeTable::add(Telescope c)
   if (data.find(c.getModel()) != data.end()) return false;
   ++id;
   c.setId(id);
-  if (c.getModel().isEmpty())
+  if (c.getModel().empty())
   {
-    c.setModel("Telescope "+QString::number(QDateTime::currentMSecsSinceEpoch()));
+    auto duration = std::chrono::system_clock::now().time_since_epoch();
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+    c.setModel("Telescope "+std::to_string(ms));
   }
   data[c.getModel()] = c;
   return true;
@@ -62,7 +64,7 @@ bool MemoryTelescopeTable::update(const Telescope& c)
   return true;
 }
 
-bool MemoryTelescopeTable::remove(const QString& name)
+bool MemoryTelescopeTable::remove(const std::string& name)
 {
   return data.erase(name) > 0;
 }

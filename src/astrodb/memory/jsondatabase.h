@@ -4,7 +4,7 @@
 #include "../database.h"
 #include <memory>
 #include <mutex>
-#include <QString>
+#include <string>
 
 namespace astrodb {
 
@@ -17,7 +17,7 @@ class MemoryTelescopeTable;
 class JsonDatabase: public Database
 {
 public:
-  JsonDatabase(const QString& filename);
+  JsonDatabase(const std::string& filename);
   virtual ~JsonDatabase();
 
   virtual void commit() override;
@@ -36,7 +36,7 @@ private:
   bool load();
   bool save();
 
-  QString filename;
+  std::string filename;
   std::mutex writelock;
   std::unique_ptr<MemoryCameraTable> cameraTable;
   std::unique_ptr<MemoryInfoSnippetTable> infoSnippetTable;

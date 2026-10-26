@@ -1,7 +1,7 @@
 #ifndef ASTRODB_INFOSNIPPET_H
 #define ASTRODB_INFOSNIPPET_H
 
-#include <QString>
+#include <string>
 
 namespace astrodb {
 
@@ -9,29 +9,29 @@ class InfoSnippet
 {
 public:
   InfoSnippet();
-  InfoSnippet(const QString& key, const QString& context, const QString& text, int64_t id=-1);
+  InfoSnippet(const std::string& key, const std::string& context, const std::string& text, int64_t id=-1);
 
   int64_t getId() const;
 
   void setId(int64_t i);
 
-  const QString& getKey() const;
+  const std::string& getKey() const;
 
-  void setKey(const QString& newKey);
+  void setKey(const std::string& newKey);
 
-  const QString& getContext() const;
+  const std::string& getContext() const;
 
-  void setContext(const QString& newContext);
+  void setContext(const std::string& newContext);
 
-  const QString& getText() const;
+  const std::string& getText() const;
 
-  void setText(const QString& newText);
+  void setText(const std::string& newText);
 
 private:
   int64_t id;
-  QString key;
-  QString context;
-  QString text;
+  std::string key;
+  std::string context;
+  std::string text;
 };
 
 } // namespace astrodb

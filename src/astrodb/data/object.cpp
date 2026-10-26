@@ -7,7 +7,7 @@ Object::Object():
 {
 }
 
-Object::Object(const QString& name, int64_t id):
+Object::Object(const std::string& name, int64_t id):
   id(id),
   name(name)
 {
@@ -23,19 +23,19 @@ void Object::setId(int64_t i)
   id = i;
 }
 
-const QString& Object::getName() const
+const std::string& Object::getName() const
 {
   return name;
 }
 
-void Object::setName(const QString& n)
+void Object::setName(const std::string& n)
 {
   name = n;
 }
 
 Object::operator bool() const
 {
-  return !name.isEmpty();
+  return !name.empty();
 }
 
 

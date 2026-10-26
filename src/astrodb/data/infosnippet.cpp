@@ -6,7 +6,7 @@ InfoSnippet::InfoSnippet()
 {
 }
 
-InfoSnippet::InfoSnippet(const QString& key, const QString& context, const QString& text, int64_t id):
+InfoSnippet::InfoSnippet(const std::string& key, const std::string& context, const std::string& text, int64_t id):
   id(id),
   key(key),
   context(context),
@@ -24,32 +24,32 @@ void InfoSnippet::setId(int64_t i)
   id = i;
 }
 
-const QString& InfoSnippet::getContext() const
+const std::string& InfoSnippet::getContext() const
 {
   return context;
 }
 
-void InfoSnippet::setContext(const QString& newContext)
+void InfoSnippet::setContext(const std::string& newContext)
 {
   context = newContext;
 }
 
-const QString& InfoSnippet::getKey() const
+const std::string& InfoSnippet::getKey() const
 {
   return key;
 }
 
-void InfoSnippet::setKey(const QString& newKey)
+void InfoSnippet::setKey(const std::string& newKey)
 {
   key = newKey;
 }
 
-const QString& InfoSnippet::getText() const
+const std::string& InfoSnippet::getText() const
 {
   return text;
 }
 
-void InfoSnippet::setText(const QString& newText)
+void InfoSnippet::setText(const std::string& newText)
 {
   text = newText;
 }

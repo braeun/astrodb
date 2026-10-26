@@ -1,7 +1,7 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
-#include <QString>
+#include <string>
 #include <map>
 #include <memory>
 
@@ -31,12 +31,12 @@ public:
 
   virtual TelescopeTable* getTelescopeTable() = 0;
 
-  static Database* connect(const QString& driver, const QString& db, const QString& user, const QString& passwd, const QString& con="default");
+  static Database* connect(const std::string& driver, const std::string& db, const std::string& user, const std::string& passwd, const std::string& con="default");
 
-  static Database* get(const QString& con="default");
+  static Database* get(const std::string& con="default");
 
 private:
-  static std::map<QString,std::unique_ptr<Database>> databases;
+  static std::map<std::string,std::unique_ptr<Database>> databases;
 
 };
 

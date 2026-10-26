@@ -13,15 +13,15 @@ public:
   InfoSnippetTable();
   virtual ~InfoSnippetTable() = default;
 
-  virtual std::set<QString> getKeys() = 0;
+  virtual std::set<std::string> getKeys() = 0;
 
-  virtual std::set<QString> getKeys(const QString& context) = 0;
+  virtual std::set<std::string> getKeys(const std::string& context) = 0;
 
-  virtual std::set<QString> getContexts() = 0;
+  virtual std::set<std::string> getContexts() = 0;
 
-  virtual std::set<QString> getContexts(const QString& key) = 0;
+  virtual std::set<std::string> getContexts(const std::string& key) = 0;
 
-  virtual std::vector<InfoSnippet> getSnippets(const QString& key, const QString& context="") = 0;
+  virtual std::vector<InfoSnippet> getSnippets(const std::string& key, const std::string& context="") = 0;
 
   virtual bool add(InfoSnippet& c) = 0;
 

@@ -1,5 +1,5 @@
 #include "memoryobjecttable.h"
-#include <QDateTime>
+#include <chrono>
 
 namespace astrodb {
 
@@ -12,14 +12,14 @@ MemoryObjectTable::~MemoryObjectTable()
 {
 }
 
-bool MemoryObjectTable::contains(const QString& name)
+bool MemoryObjectTable::contains(const std::string& name)
 {
   return data.find(name) != data.end();
 }
 
-std::vector<QString> MemoryObjectTable::getNameList()
+std::vector<std::string> MemoryObjectTable::getNameList()
 {
-  std::vector<QString> keys;
+  std::vector<std::string> keys;
   for (const auto& [k, v] : data)
   {
     keys.push_back(k);
@@ -37,7 +37,7 @@ std::vector<Object> MemoryObjectTable::getAll()
   return list;
 }
 
-Object MemoryObjectTable::get(const QString& name)
+Object MemoryObjectTable::get(const std::string& name)
 {
   if (data.find(name) != data.end()) return data.at(name);
   return Object();
@@ -48,9 +48,11 @@ bool MemoryObjectTable::add(Object c)
   if (data.find(c.getName()) != data.end()) return false;
   ++id;
   c.setId(id);
-  if (c.getName().isEmpty())
+  if (c.getName().empty())
   {
-    c.setName("Object "+QString::number(QDateTime::currentMSecsSinceEpoch()));
+    auto duration = std::chrono::system_clock::now().time_since_epoch();
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+    c.setName("Object "+std::to_string(ms));
   }
   data[c.getName()] = c;
   return true;
@@ -62,7 +64,7 @@ bool MemoryObjectTable::update(const Object& c)
   return true;
 }
 
-bool MemoryObjectTable::remove(const QString& name)
+bool MemoryObjectTable::remove(const std::string& name)
 {
   return data.erase(name) > 0;
 }

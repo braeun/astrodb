@@ -1,5 +1,5 @@
 #include "memorycameratable.h"
-#include <QDateTime>
+#include <chrono>
 
 namespace astrodb {
 
@@ -12,14 +12,14 @@ MemoryCameraTable::~MemoryCameraTable()
 {
 }
 
-bool MemoryCameraTable::contains(const QString& name)
+bool MemoryCameraTable::contains(const std::string& name)
 {
   return data.find(name) != data.end();
 }
 
-std::vector<QString> MemoryCameraTable::getNameList()
+std::vector<std::string> MemoryCameraTable::getNameList()
 {
-  std::vector<QString> keys;
+  std::vector<std::string> keys;
   for (const auto& [k, v] : data)
   {
     keys.push_back(k);
@@ -37,7 +37,7 @@ std::vector<Camera> MemoryCameraTable::getAll()
   return cameras;
 }
 
-Camera MemoryCameraTable::get(const QString& name)
+Camera MemoryCameraTable::get(const std::string& name)
 {
   if (data.find(name) != data.end()) return data.at(name);
   return Camera();
@@ -48,9 +48,11 @@ bool MemoryCameraTable::add(Camera c)
   if (data.find(c.getModel()) != data.end()) return false;
   ++id;
   c.setId(id);
-  if (c.getModel().isEmpty())
+  if (c.getModel().empty())
   {
-    c.setModel("Camera "+QString::number(QDateTime::currentMSecsSinceEpoch()));
+    auto duration = std::chrono::system_clock::now().time_since_epoch();
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+    c.setModel("Camera "+std::to_string(ms));
   }
   data[c.getModel()] = c;
   return true;
@@ -62,7 +64,7 @@ bool MemoryCameraTable::update(const Camera& c)
   return true;
 }
 
-bool MemoryCameraTable::remove(const QString& name)
+bool MemoryCameraTable::remove(const std::string& name)
 {
   return data.erase(name) > 0;
 }

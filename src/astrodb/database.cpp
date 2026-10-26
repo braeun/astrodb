@@ -1,11 +1,12 @@
 #include "database.h"
 #include "memory/jsondatabase.h"
+#include <algorithm>
 
 namespace astrodb {
 
-std::map<QString,std::unique_ptr<Database>> Database::databases;
+std::map<std::string,std::unique_ptr<Database>> Database::databases;
 
-Database* Database::connect(const QString& driver, const QString& db, const QString& user, const QString& passwd, const QString& con)
+Database* Database::connect(const std::string& driver, const std::string& db, const std::string& user, const std::string& passwd, const std::string& con)
 {
   auto it = databases.find(con);
   if (it != databases.end())
@@ -13,7 +14,9 @@ Database* Database::connect(const QString& driver, const QString& db, const QStr
     databases.erase(it);
   }
   std::unique_ptr<Database> p;
-  if (driver.toLower() == "json")
+  std::string d = driver;
+  std::transform(d.begin(),d.end(),d.begin(),::tolower);
+  if (d == "json")
   {
     p.reset(new JsonDatabase(db));
   }
@@ -24,7 +27,7 @@ Database* Database::connect(const QString& driver, const QString& db, const QStr
   return get(con);
 }
 
-Database* Database::get(const QString& con)
+Database* Database::get(const std::string& con)
 {
   if (databases.find(con) != databases.end())
   {

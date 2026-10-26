@@ -12,15 +12,15 @@ public:
   MemoryInfoSnippetTable();
   ~MemoryInfoSnippetTable();
 
-  virtual std::set<QString> getKeys() override;
+  virtual std::set<std::string> getKeys() override;
 
-  virtual std::set<QString> getKeys(const QString& context) override;
+  virtual std::set<std::string> getKeys(const std::string& context) override;
 
-  virtual std::set<QString> getContexts() override;
+  virtual std::set<std::string> getContexts() override;
 
-  virtual std::set<QString> getContexts(const QString& key) override;
+  virtual std::set<std::string> getContexts(const std::string& key) override;
 
-  virtual std::vector<InfoSnippet> getSnippets(const QString& key, const QString& context="") override;
+  virtual std::vector<InfoSnippet> getSnippets(const std::string& key, const std::string& context="") override;
 
   virtual bool add(InfoSnippet& s) override;
 

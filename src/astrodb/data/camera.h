@@ -2,7 +2,7 @@
 #define ASTRODB_CAMERA_H
 
 #include <cstdint>
-#include <QString>
+#include <string>
 
 namespace astrodb {
 
@@ -10,15 +10,15 @@ class Camera
 {
 public:
   Camera();
-  Camera(const QString& model, int width, int height, int64_t id=-1);
+  Camera(const std::string& model, int width, int height, int64_t id=-1);
 
   int64_t getId() const;
 
   void setId(int64_t i);
 
-  const QString& getModel() const;
+  const std::string& getModel() const;
 
-  void setModel(const QString& newModel);
+  void setModel(const std::string& newModel);
 
   int getWidth() const;
 
@@ -52,7 +52,7 @@ public:
 
 private:
   int64_t id;
-  QString model;
+  std::string model;
   int width; //!< in pixel
   int height; //!< in pixel
   double pixelwidth; //!< width of a pixel in m

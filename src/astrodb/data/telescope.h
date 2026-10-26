@@ -2,7 +2,7 @@
 #define ASTRODB_TELESCOPE_H
 
 #include <cstdint>
-#include <QString>
+#include <string>
 
 namespace astrodb {
 
@@ -15,15 +15,15 @@ class Telescope
 {
 public:
   Telescope();
-  Telescope(const QString& model, double f, double d, int64_t id=-1);
+  Telescope(const std::string& model, double f, double d, int64_t id=-1);
 
   int64_t getId() const;
 
   void setId(int64_t i);
 
-  const QString& getModel() const;
+  const std::string& getModel() const;
 
-  void setModel(const QString& m);
+  void setModel(const std::string& m);
 
   /**
    * @brief Get the focal length of the telescope.
@@ -41,7 +41,7 @@ public:
 
 private:
   int64_t id;
-  QString model;
+  std::string model;
   double focalLength;
   double aperture;
 };
