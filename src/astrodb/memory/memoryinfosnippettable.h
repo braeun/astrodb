@@ -22,7 +22,7 @@ public:
 
   virtual std::vector<InfoSnippet> getSnippets(const std::string& key, const std::string& context="") override;
 
-  virtual bool add(InfoSnippet& s) override;
+  virtual bool add(const InfoSnippet& s) override;
 
   virtual bool update(const InfoSnippet& s) override;
 

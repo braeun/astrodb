@@ -72,11 +72,11 @@ std::vector<InfoSnippet> MemoryInfoSnippetTable::getSnippets(const std::string& 
   return list;
 }
 
-bool MemoryInfoSnippetTable::add(InfoSnippet& s)
+bool MemoryInfoSnippetTable::add(const InfoSnippet& s)
 {
   ++id;
-  s.setId(id);
   data.push_back(s);
+  data.back().setId(id);
   return true;
 }
 

@@ -23,7 +23,7 @@ public:
 
   virtual std::vector<InfoSnippet> getSnippets(const std::string& key, const std::string& context="") = 0;
 
-  virtual bool add(InfoSnippet& c) = 0;
+  virtual bool add(const InfoSnippet& c) = 0;
 
   virtual bool update(const InfoSnippet& c) = 0;
 

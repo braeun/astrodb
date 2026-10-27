@@ -47,12 +47,12 @@ include(CMakePackageConfigHelpers)
 set(ENV{PKG_CONFIG_PATH} "${PKG_CONFIG_PATH}:/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig")
 find_package(PkgConfig REQUIRED)
 
-find_package(SQLite3)
-if (SQLite3_FOUND)
-  if(NOT TARGET SQLite3::SQLite3) # CMake < 4.3
-    add_library(SQLite3::SQLite3 ALIAS SQLite::SQLite3)
-  endif()
-endif()
+# find_package(SQLite3)
+# if (SQLite3_FOUND)
+#   if(NOT TARGET SQLite3::SQLite3) # CMake < 4.3
+#     add_library(SQLite3::SQLite3 ALIAS SQLite::SQLite3)
+#   endif()
+# endif()
 
 #-----------------------------------------------------------------------------
 # OPTIONS
@@ -60,7 +60,7 @@ endif()
 # build options
 #-----------------------------------------------------------------------------
 
-CMAKE_DEPENDENT_OPTION(BUILD_SQLITE3_DB "build sqlite3 based database" ON "SQLITE3_FOUND" OFF)
+# CMAKE_DEPENDENT_OPTION(BUILD_SQLITE3_DB "build sqlite3 based database" ON "SQLITE3_FOUND" OFF)
 
 #-----------------------------------------------------------------------------
 # COMPILE DEFINITIONS
@@ -70,7 +70,9 @@ CMAKE_DEPENDENT_OPTION(BUILD_SQLITE3_DB "build sqlite3 based database" ON "SQLIT
 # BUILD ALL COMPONENTS
 #-----------------------------------------------------------------------------
 
-add_subdirectory(src/base)
+add_subdirectory(src/astrodb)
+
+add_subdirectory(src/plugins)
 
 #-----------------------------------------------------------------------------
 # INSTALL
