@@ -5,14 +5,19 @@
 #include "memoryobservertable.h"
 #include "memorytelescopetable.h"
 #include "json.hpp"
+#include "../utils.h"
 #include <ctime>
 #include <fstream>
 
 namespace astrodb {
 
-JsonDatabase::JsonDatabase(const std::string& filename):
-  filename(filename)
+JsonDatabase::JsonDatabase(const std::string& fn):
+  filename(fn)
 {
+  if (filename.empty())
+  {
+    filename = utils::getUserDataPath() + "/astrodb.json";
+  }
   cameraTable = std::make_unique<MemoryCameraTable>();
   infoSnippetTable = std::make_unique<MemoryInfoSnippetTable>();
   objectTable = std::make_unique<MemoryObjectTable>();

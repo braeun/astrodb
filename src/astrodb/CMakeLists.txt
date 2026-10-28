@@ -21,6 +21,7 @@ add_library(astrodb-base SHARED
   memory/memoryobjecttable.h memory/memoryobjecttable.cpp
   memory/memoryobservertable.h memory/memoryobservertable.cpp
   memory/memorytelescopetable.h memory/memorytelescopetable.cpp
+  utils.h utils.cpp
 )
 
 add_library(astrodb::astrodb-base ALIAS astrodb-base)

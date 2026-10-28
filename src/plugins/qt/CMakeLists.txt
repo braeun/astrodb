@@ -28,6 +28,12 @@ if (Qt6_FOUND)
     astrodb::astrodb-base
   )
 
+install(TARGETS astrodb_qt
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/astrodb
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
 
 
 endif()

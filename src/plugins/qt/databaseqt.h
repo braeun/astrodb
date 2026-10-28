@@ -30,6 +30,8 @@ public:
   virtual TelescopeTable* getTelescopeTable() override;
 
 private:
+  void setupSQLite(const std::string& dbname, const std::string& user, const std::string& passwd);
+
   QString con;
   std::unique_ptr<CameraTableQt> cameraTable;
   std::unique_ptr<InfoSnippetTableQt> infoSnippetTable;
