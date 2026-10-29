@@ -17,6 +17,10 @@ class DatabaseQt: public Database
 public:
   DatabaseQt(const std::string& driver, const std::string& dbname, const std::string& user, const std::string& passwd);
 
+  virtual std::string getBackend() const override;
+
+  virtual std::string getName() const override;
+
   virtual void commit() override;
 
   virtual CameraTable* getCameraTable() override;

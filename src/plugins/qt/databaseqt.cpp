@@ -35,6 +35,18 @@ DatabaseQt::DatabaseQt(const std::string& driver, const std::string& dbname, con
   telescopeTable = std::make_unique<TelescopeTableQt>(con);
 }
 
+std::string DatabaseQt::getBackend() const
+{
+  QSqlDatabase db = QSqlDatabase::database(con);
+  return db.driverName().toStdString();
+}
+
+std::string DatabaseQt::getName() const
+{
+  QSqlDatabase db = QSqlDatabase::database(con);
+  return db.databaseName().toStdString();
+}
+
 void DatabaseQt::commit()
 {
 }
@@ -65,52 +77,61 @@ TelescopeTable* DatabaseQt::getTelescopeTable()
 }
 
 const char* cmds[]{
-  "CREATE TABLE Cameras (id SERIAL PRIMARY KEY,model VARCHAR(128) UNIQUE NOT NULL,width INTEGER,height INTEGER,pixelwidth REAL,pixelheight REAL,sensorwidth REAL,sensorheight REAL,bpp INTEGER);",
-  "CREATE TABLE Objects (id SERIAL PRIMARY KEY,name VARCHAR(128) UNIQUE NOT NULL);",
-  "CREATE TABLE Observers (id SERIAL PRIMARY KEY,name VARCHAR(128) UNIQUE NOT NULL);",
-  "CREATE TABLE Telescopes (id SERIAL PRIMARY KEY,model VARCHAR(128) UNIQUE NOT NULL,focallength REAL,aperture REAL);",
-  "CREATE TABLE InfoSnippets (id SERIAL PRIMARY KEY,key VARCHAR(128) UNIQUE NOT NULL,context VARCHAR(128) UNIQUE NOT NULL,note TEXT);"
+  "CREATE TABLE Cameras (id INTEGER PRIMARY KEY,model VARCHAR(128) UNIQUE NOT NULL,width INTEGER,height INTEGER,pixelwidth REAL,pixelheight REAL,sensorwidth REAL,sensorheight REAL,bpp INTEGER);",
+  "CREATE TABLE Objects (id INTEGER PRIMARY KEY,name VARCHAR(128) UNIQUE NOT NULL);",
+  "CREATE TABLE Observers (id INTEGER PRIMARY KEY,name VARCHAR(128) UNIQUE NOT NULL);",
+  "CREATE TABLE Telescopes (id INTEGER PRIMARY KEY,model VARCHAR(128) UNIQUE NOT NULL,focallength REAL,aperture REAL);",
+  "CREATE TABLE InfoSnippets (id INTEGER PRIMARY KEY,key VARCHAR(128) UNIQUE NOT NULL,context VARCHAR(128) UNIQUE NOT NULL,note TEXT);"
 };
 
 void DatabaseQt::setupSQLite(const std::string& dbname, const std::string& user, const std::string& passwd)
 {
   if (!QFileInfo::exists(QString::fromStdString(dbname)))
   {
-    auto db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(QString::fromStdString(dbname));
-    db.setUserName(QString::fromStdString(user));
-    db.setPassword(QString::fromStdString(passwd));
-    if (!(db.isValid() && db.isOpen())) throw std::runtime_error("Failed to open SQLITE database");
+    QString connectionName;
     {
-      QSqlQuery q(db);
-      q.prepare(cmds[0]);
-      bool ret = q.exec();
-      if (!ret) throw std::runtime_error(q.lastError().text().toStdString());
+      auto db = QSqlDatabase::addDatabase("QSQLITE");
+      connectionName = db.connectionName();
+      db.setDatabaseName(QString::fromStdString(dbname));
+      db.setUserName(QString::fromStdString(user));
+      db.setPassword(QString::fromStdString(passwd));
+      if (!db.open())
+      {
+        throw std::runtime_error("Failed to open SQLITE database");
+      }
+      {
+        QSqlQuery q(db);
+        q.prepare(cmds[0]);
+        bool ret = q.exec();
+        if (!ret) throw std::runtime_error(q.lastError().text().toStdString());
+      }
+      {
+        QSqlQuery q(db);
+        q.prepare(cmds[1]);
+        bool ret = q.exec();
+        if (!ret) throw std::runtime_error(q.lastError().text().toStdString());
+      }
+      {
+        QSqlQuery q(db);
+        q.prepare(cmds[2]);
+        bool ret = q.exec();
+        if (!ret) throw std::runtime_error(q.lastError().text().toStdString());
+      }
+      {
+        QSqlQuery q(db);
+        q.prepare(cmds[3]);
+        bool ret = q.exec();
+        if (!ret) throw std::runtime_error(q.lastError().text().toStdString());
+      }
+      {
+        QSqlQuery q(db);
+        q.prepare(cmds[4]);
+        bool ret = q.exec();
+        if (!ret) throw std::runtime_error(q.lastError().text().toStdString());
+      }
+      db.close();
     }
-    {
-      QSqlQuery q(db);
-      q.prepare(cmds[1]);
-      bool ret = q.exec();
-      if (!ret) throw std::runtime_error(q.lastError().text().toStdString());
-    }
-    {
-      QSqlQuery q(db);
-      q.prepare(cmds[2]);
-      bool ret = q.exec();
-      if (!ret) throw std::runtime_error(q.lastError().text().toStdString());
-    }
-    {
-      QSqlQuery q(db);
-      q.prepare(cmds[3]);
-      bool ret = q.exec();
-      if (!ret) throw std::runtime_error(q.lastError().text().toStdString());
-    }
-    {
-      QSqlQuery q(db);
-      q.prepare(cmds[4]);
-      bool ret = q.exec();
-      if (!ret) throw std::runtime_error(q.lastError().text().toStdString());
-    }
+    QSqlDatabase::removeDatabase(connectionName);
   }
 }
 

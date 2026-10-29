@@ -179,10 +179,10 @@ bool TelescopeTableQt::remove(int64_t id)
 
 Telescope TelescopeTableQt::get(const QSqlQuery& q) const
 {
-  std::string name = q.value("name").toString().toStdString();
+  std::string model = q.value("model").toString().toStdString();
   double f = q.value("focallength").toDouble();
   double d = q.value("aperture").toDouble();
-  Telescope o(name,f,d);
+  Telescope o(model,f,d);
   o.setId(q.value("id").toLongLong());
   return o;
 }

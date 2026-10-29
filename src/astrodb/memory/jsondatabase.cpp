@@ -31,6 +31,16 @@ JsonDatabase::~JsonDatabase()
   save();
 }
 
+std::string JsonDatabase::getBackend() const
+{
+  return "JSON";
+}
+
+std::string JsonDatabase::getName() const
+{
+  return filename;
+}
+
 void JsonDatabase::commit()
 {
   save();

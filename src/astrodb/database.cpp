@@ -52,6 +52,17 @@ Database* Database::connect(const std::string& driver, const std::string& db, co
   {
     p.reset(new JsonDatabase(db));
   }
+  else
+  {
+    for (const auto& h : plugins)
+    {
+      if (h->handlesDriver(driver))
+      {
+        p = h->connect(driver,db,user,passwd);
+        break;
+      }
+    }
+  }
   if (p)
   {
     databases[con] = std::move(p);
@@ -201,13 +212,22 @@ std::string Database::PluginHandler::getPluginVersion() const
   return "error";
 }
 
+bool Database::PluginHandler::handlesDriver(const std::string& driver) const
+{
+  for (const auto& d : getDrivers())
+  {
+    if (d == driver) return true;
+  }
+  return false;
+}
+
 std::vector<std::string> Database::PluginHandler::getDrivers() const
 {
   if (instance) return instance->getDrivers();
   return std::vector<std::string>();
 }
 
-std::unique_ptr<Database> Database::PluginHandler::connect(const std::string& driver, const std::string& db, const std::string& user, const std::string& passwd)
+std::unique_ptr<Database> Database::PluginHandler::connect(const std::string& driver, const std::string& db, const std::string& user, const std::string& passwd) const
 {
   if (instance) return instance->connect(driver,db,user,passwd);
   return std::unique_ptr<Database>();

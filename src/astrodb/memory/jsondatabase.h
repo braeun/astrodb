@@ -20,6 +20,10 @@ public:
   JsonDatabase(const std::string& filename);
   virtual ~JsonDatabase();
 
+  virtual std::string getBackend() const override;
+
+  virtual std::string getName() const override;
+
   virtual void commit() override;
 
   virtual CameraTable* getCameraTable() override;

@@ -32,6 +32,10 @@ public:
   Database() = default;
   virtual ~Database() = default;
 
+  virtual std::string getBackend() const = 0;
+
+  virtual std::string getName() const = 0;
+
   virtual void commit() = 0;
 
   virtual CameraTable* getCameraTable() = 0;
@@ -96,9 +100,11 @@ private:
 
     std::string getPluginVersion() const;
 
+    bool handlesDriver(const std::string& driver) const;
+
     std::vector<std::string> getDrivers() const;
 
-    std::unique_ptr<Database> connect(const std::string& driver, const std::string& db, const std::string& user, const std::string& passwd);
+    std::unique_ptr<Database> connect(const std::string& driver, const std::string& db, const std::string& user, const std::string& passwd) const;
 
     PluginHandler& operator=(const PluginHandler&) = delete;
 
