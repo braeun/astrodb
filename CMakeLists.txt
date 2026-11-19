@@ -47,6 +47,8 @@ include(CMakePackageConfigHelpers)
 set(ENV{PKG_CONFIG_PATH} "${PKG_CONFIG_PATH}:/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig")
 find_package(PkgConfig REQUIRED)
 
+find_package(Qt6 COMPONENTS Widgets Sql)
+
 # find_package(SQLite3)
 # if (SQLite3_FOUND)
 #   if(NOT TARGET SQLite3::SQLite3) # CMake < 4.3
@@ -66,6 +68,18 @@ find_package(PkgConfig REQUIRED)
 # COMPILE DEFINITIONS
 #-----------------------------------------------------------------------------
 
+if (Qt6_FOUND)
+  set(CMAKE_AUTOUIC ON)
+  set(CMAKE_AUTOMOC ON)
+  set(CMAKE_AUTORCC ON)
+
+  set(ASTRODB_QT6_DEF)
+  list(APPEND ASTRODB_QT6_DEF -DVERSION_MAJOR=${PROJECT_VERSION_MAJOR})
+  list(APPEND ASTRODB_QT6_DEF -DVERSION_MINOR=${PROJECT_VERSION_MINOR})
+  list(APPEND ASTRODB_QT6_DEF -DVERSION_PATCH=${PROJECT_VERSION_PATCH})
+endif()
+
+
 #-----------------------------------------------------------------------------
 # BUILD ALL COMPONENTS
 #-----------------------------------------------------------------------------
@@ -73,6 +87,11 @@ find_package(PkgConfig REQUIRED)
 add_subdirectory(src/astrodb)
 
 add_subdirectory(src/plugins)
+
+if (Qt6_FOUND)
+  add_subdirectory(src/guiqt)
+endif()
+
 
 #-----------------------------------------------------------------------------
 # INSTALL
