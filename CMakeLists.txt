@@ -89,7 +89,7 @@ add_subdirectory(src/astrodb)
 add_subdirectory(src/plugins)
 
 if (Qt6_FOUND)
-  add_subdirectory(src/guiqt)
+  add_subdirectory(src/astrodb-guiqt)
 endif()
 
 
