@@ -1,5 +1,5 @@
-#ifndef SETTING_H
-#define SETTING_H
+#ifndef ASTRODB_SETTINGS_H
+#define ASTRODB_SETTINGS_H
 
 namespace astrodb
 {
