@@ -49,13 +49,6 @@ find_package(PkgConfig REQUIRED)
 
 find_package(Qt6 COMPONENTS Widgets Sql)
 
-# find_package(SQLite3)
-# if (SQLite3_FOUND)
-#   if(NOT TARGET SQLite3::SQLite3) # CMake < 4.3
-#     add_library(SQLite3::SQLite3 ALIAS SQLite::SQLite3)
-#   endif()
-# endif()
-
 #-----------------------------------------------------------------------------
 # OPTIONS
 #-----------------------------------------------------------------------------

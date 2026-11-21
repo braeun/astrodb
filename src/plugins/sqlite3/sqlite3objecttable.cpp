@@ -1,4 +1,5 @@
 #include "sqlite3objecttable.h"
+#include <chrono>
 #include <cstring>
 #include <iostream>
 
@@ -16,7 +17,7 @@ Sqlite3ObjectTable::~Sqlite3ObjectTable()
 
 bool Sqlite3ObjectTable::contains(const std::string& id)
 {
-  std::string sqlQuery = "SELECT name FROM object WHERE name='"+id+"';";
+  std::string sqlQuery = "SELECT name FROM Objects WHERE name='"+id+"';";
   sqlite3_stmt* s;
   int ret = sqlite3_prepare_v2(db,sqlQuery.c_str(),sqlQuery.length(),&s,nullptr);
   ret = sqlite3_step(s);
@@ -24,9 +25,9 @@ bool Sqlite3ObjectTable::contains(const std::string& id)
   return ret == SQLITE_ROW;
 }
 
-std::vector<std::string> Sqlite3ObjectTable::getIdList()
+std::vector<std::string> Sqlite3ObjectTable::getNameList()
 {
-  std::string sqlQuery = "SELECT name FROM object;";
+  std::string sqlQuery = "SELECT name FROM Objects;";
   sqlite3_stmt* s;
   int ret = sqlite3_prepare_v2(db,sqlQuery.c_str(),sqlQuery.length(),&s,nullptr);
   std::vector<std::string> keys;
@@ -40,14 +41,15 @@ std::vector<std::string> Sqlite3ObjectTable::getIdList()
 
 std::vector<Object> Sqlite3ObjectTable::getAll()
 {
-  std::string sqlQuery = "SELECT name FROM object;";
+  std::string sqlQuery = "SELECT id,name FROM Objects;";
   sqlite3_stmt* s;
   int ret = sqlite3_prepare_v2(db,sqlQuery.c_str(),sqlQuery.length(),&s,nullptr);
   std::vector<Object> list;
   while ((ret = sqlite3_step(s)) == SQLITE_ROW)
   {
-    std::string name = (const char*)sqlite3_column_text(s,0);
+    std::string name = (const char*)sqlite3_column_text(s,1);
     Object o(name);
+    o.setId(sqlite3_column_int(s,0));
     list.push_back(o);
   }
   sqlite3_finalize(s);
@@ -56,25 +58,33 @@ std::vector<Object> Sqlite3ObjectTable::getAll()
 
 Object Sqlite3ObjectTable::get(const std::string& id)
 {
-  std::string sqlQuery = "SELECT name FROM object WHERE name='"+id+"';";
+  std::string sqlQuery = "SELECT id,name FROM Objects WHERE name=?;";
   sqlite3_stmt* s;
   int ret = sqlite3_prepare_v2(db,sqlQuery.c_str(),sqlQuery.length(),&s,nullptr);
+  sqlite3_bind_text(s,1,id.c_str(),-1,SQLITE_STATIC);
   Object o;
   if ((ret = sqlite3_step(s)) == SQLITE_ROW)
   {
-    std::string name = (const char*)sqlite3_column_text(s,0);
+    std::string name = (const char*)sqlite3_column_text(s,1);
     o = Object(name);
+    o.setId(sqlite3_column_int(s,0));
   }
   sqlite3_finalize(s);
   return o;
 }
 
-bool Sqlite3ObjectTable::add(const Object& t)
+bool Sqlite3ObjectTable::add(Object o)
 {
-  std::string sql = "INSERT INTO object (name) VALUES (?);";
+  if (o.getName().empty())
+  {
+    auto duration = std::chrono::system_clock::now().time_since_epoch();
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+    o.setName("Object "+std::to_string(ms));
+  }
+  std::string sql = "INSERT INTO Objects (name) VALUES (?);";
   sqlite3_stmt* s;
   int ret = sqlite3_prepare_v2(db,sql.c_str(),sql.length(),&s,nullptr);
-  sqlite3_bind_text(s,1,t.getName().c_str(),-1,SQLITE_STATIC);
+  sqlite3_bind_text(s,1,o.getName().c_str(),-1,SQLITE_STATIC);
   ret = sqlite3_step(s);
   sqlite3_finalize(s);
   return ret == SQLITE_DONE;
@@ -82,23 +92,33 @@ bool Sqlite3ObjectTable::add(const Object& t)
 
 bool Sqlite3ObjectTable::update(const Object& t)
 {
-  // std::string sql = "UPDATE object SET f=?,d=? WHERE name='?';";
-  // sqlite3_stmt* s;
-  // int ret = sqlite3_prepare_v2(db,sql.c_str(),sql.length(),&s,nullptr);
-  // sqlite3_bind_double(s,1,t.getFocalLength());
-  // sqlite3_bind_double(s,2,t.getAperture());
-  // sqlite3_bind_text(s,3,t.getName().c_str(),-1,SQLITE_STATIC);
-  // ret = sqlite3_step(s);
-  // sqlite3_finalize(s);
-  // return ret == SQLITE_DONE;
-  return true;
+  std::string sql = "UPDATE Objects SET name=? WHERE id=?;";
+  sqlite3_stmt* s;
+  int ret = sqlite3_prepare_v2(db,sql.c_str(),sql.length(),&s,nullptr);
+  sqlite3_bind_text(s,1,t.getName().c_str(),-1,SQLITE_STATIC);
+  sqlite3_bind_int(s,2,t.getId());
+  ret = sqlite3_step(s);
+  sqlite3_finalize(s);
+  return ret == SQLITE_DONE;
 }
 
 bool Sqlite3ObjectTable::remove(const std::string& id)
 {
-  std::string sqlQuery = "DELETE FROM object WHERE name='"+id+"';";
+  std::string sqlQuery = "DELETE FROM Objects WHERE name=?;";
   sqlite3_stmt* s;
   int ret = sqlite3_prepare_v2(db,sqlQuery.c_str(),sqlQuery.length(),&s,nullptr);
+  sqlite3_bind_text(s,1,id.c_str(),-1,SQLITE_STATIC);
+  ret = sqlite3_step(s);
+  sqlite3_finalize(s);
+  return ret == SQLITE_DONE;
+}
+
+bool Sqlite3ObjectTable::remove(int64_t id)
+{
+  std::string sqlQuery = "DELETE FROM Objects WHERE id=?;";
+  sqlite3_stmt* s;
+  int ret = sqlite3_prepare_v2(db,sqlQuery.c_str(),sqlQuery.length(),&s,nullptr);
+  sqlite3_bind_int(s,1,id);
   ret = sqlite3_step(s);
   sqlite3_finalize(s);
   return ret == SQLITE_DONE;
@@ -108,9 +128,9 @@ bool Sqlite3ObjectTable::remove(const std::string& id)
 
 void Sqlite3ObjectTable::assertTable()
 {
-  const char* sqlQuery = "SELECT name FROM sqlite_schema WHERE type='table' AND name='object';";
-  const char* sqlCreate = "CREATE TABLE object("
-                          "id INT PRIMARY KEY     NOT NULL, "
+  const char* sqlQuery = "SELECT name FROM sqlite_schema WHERE type='table' AND name='Objects';";
+  const char* sqlCreate = "CREATE TABLE Objects("
+                          "id INTEGER PRIMARY KEY, "
                           "name          TEXT    NOT NULL);";
   sqlite3_stmt* s;
   int ret = sqlite3_prepare_v2(db,sqlQuery,std::strlen(sqlQuery),&s,nullptr);

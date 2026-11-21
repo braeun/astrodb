@@ -1,8 +1,8 @@
 #ifndef ASTRODB_SQLITE3CAMERATABLE_H
 #define ASTRODB_SQLITE3CAMERATABLE_H
 
-#include "../cameratable.h"
-#include "../data/camera.h"
+#include <astrodb/cameratable.h>
+#include <astrodb/data/camera.h>
 #include <sqlite3.h>
 
 namespace astrodb {
@@ -15,17 +15,19 @@ public:
 
   virtual bool contains(const std::string& id) override;
 
-  virtual std::vector<std::string> getIdList() override;
+  virtual std::vector<std::string> getNameList() override;
 
   virtual std::vector<Camera> getAll() override;
 
   virtual Camera get(const std::string& id) override;
 
-  virtual bool add(const Camera& c) override;
+  virtual bool add(Camera c) override;
 
   virtual bool update(const Camera& c) override;
 
   virtual bool remove(const std::string& id) override;
+
+  virtual bool remove(int64_t id) override;
 
 private:
   void assertTable();

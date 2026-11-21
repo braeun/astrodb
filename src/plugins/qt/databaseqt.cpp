@@ -76,7 +76,7 @@ TelescopeTable* DatabaseQt::getTelescopeTable()
   return telescopeTable.get();
 }
 
-const char* cmds[]{
+static const char* cmds[]{
   "CREATE TABLE Cameras (id INTEGER PRIMARY KEY,model VARCHAR(128) UNIQUE NOT NULL,width INTEGER,height INTEGER,pixelwidth REAL,pixelheight REAL,sensorwidth REAL,sensorheight REAL,bpp INTEGER);",
   "CREATE TABLE Objects (id INTEGER PRIMARY KEY,name VARCHAR(128) UNIQUE NOT NULL);",
   "CREATE TABLE Observers (id INTEGER PRIMARY KEY,name VARCHAR(128) UNIQUE NOT NULL);",

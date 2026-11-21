@@ -119,22 +119,25 @@ void DatabaseDialog::setupTelescopeTable()
 void DatabaseDialog::updateCameraTable()
 {
   updating = true;
-  auto db = astrodb::Database::get();
-  auto table = db->getCameraTable();
   ui->tableWidget->clearContents();
-  cameras = table->getAll();
-  ui->tableWidget->setRowCount(cameras.size());
-  int row = 0;
-  for (const auto& c : cameras)
+  auto db = astrodb::Database::get();
+  if (db)
   {
-    ui->tableWidget->setItem(row,0,new QTableWidgetItem(QString::number(c.getId())));
-    ui->tableWidget->item(row,0)->setFlags(ui->tableWidget->item(row,0)->flags()^Qt::ItemIsEditable);
-    ui->tableWidget->setItem(row,1,new QTableWidgetItem(QString::fromStdString(c.getModel())));
-    ui->tableWidget->setItem(row,2,new QTableWidgetItem(QString::number(c.getWidth())));
-    ui->tableWidget->setItem(row,3,new QTableWidgetItem(QString::number(c.getHeight())));
-    ui->tableWidget->setItem(row,4,new QTableWidgetItem(QString::number(c.getPixelWidth()*1.0E6)));
-    ui->tableWidget->setItem(row,5,new QTableWidgetItem(QString::number(c.getPixelHeight()*1.0E6)));
-    ++row;
+    auto table = db->getCameraTable();
+    cameras = table->getAll();
+    ui->tableWidget->setRowCount(cameras.size());
+    int row = 0;
+    for (const auto& c : cameras)
+    {
+      ui->tableWidget->setItem(row,0,new QTableWidgetItem(QString::number(c.getId())));
+      ui->tableWidget->item(row,0)->setFlags(ui->tableWidget->item(row,0)->flags()^Qt::ItemIsEditable);
+      ui->tableWidget->setItem(row,1,new QTableWidgetItem(QString::fromStdString(c.getModel())));
+      ui->tableWidget->setItem(row,2,new QTableWidgetItem(QString::number(c.getWidth())));
+      ui->tableWidget->setItem(row,3,new QTableWidgetItem(QString::number(c.getHeight())));
+      ui->tableWidget->setItem(row,4,new QTableWidgetItem(QString::number(c.getPixelWidth()*1.0E6)));
+      ui->tableWidget->setItem(row,5,new QTableWidgetItem(QString::number(c.getPixelHeight()*1.0E6)));
+      ++row;
+    }
   }
   updating = false;
 }
@@ -142,18 +145,21 @@ void DatabaseDialog::updateCameraTable()
 void DatabaseDialog::updateObjectTable()
 {
   updating = true;
-  auto db = astrodb::Database::get();
-  auto table = db->getObjectTable();
   ui->tableWidget->clearContents();
-  objects = table->getAll();
-  ui->tableWidget->setRowCount(objects.size());
-  int row = 0;
-  for (const auto& o : objects)
+  auto db = astrodb::Database::get();
+  if (db)
   {
-    ui->tableWidget->setItem(row,0,new QTableWidgetItem(QString::number(o.getId())));
-    ui->tableWidget->item(row,0)->setFlags(ui->tableWidget->item(row,0)->flags()^Qt::ItemIsEditable);
-    ui->tableWidget->setItem(row,1,new QTableWidgetItem(QString::fromStdString(o.getName())));
-    ++row;
+    auto table = db->getObjectTable();
+    objects = table->getAll();
+    ui->tableWidget->setRowCount(objects.size());
+    int row = 0;
+    for (const auto& o : objects)
+    {
+      ui->tableWidget->setItem(row,0,new QTableWidgetItem(QString::number(o.getId())));
+      ui->tableWidget->item(row,0)->setFlags(ui->tableWidget->item(row,0)->flags()^Qt::ItemIsEditable);
+      ui->tableWidget->setItem(row,1,new QTableWidgetItem(QString::fromStdString(o.getName())));
+      ++row;
+    }
   }
   updating = false;
 }
@@ -161,18 +167,21 @@ void DatabaseDialog::updateObjectTable()
 void DatabaseDialog::updateObserverTable()
 {
   updating = true;
-  auto db = astrodb::Database::get();
-  auto table = db->getObserverTable();
   ui->tableWidget->clearContents();
-  observers = table->getAll();
-  ui->tableWidget->setRowCount(observers.size());
-  int row = 0;
-  for (const auto& o : observers)
+  auto db = astrodb::Database::get();
+  if (db)
   {
-    ui->tableWidget->setItem(row,0,new QTableWidgetItem(QString::number(o.getId())));
-    ui->tableWidget->item(row,0)->setFlags(ui->tableWidget->item(row,0)->flags()^Qt::ItemIsEditable);
-    ui->tableWidget->setItem(row,1,new QTableWidgetItem(QString::fromStdString(o.getName())));
-    ++row;
+    auto table = db->getObserverTable();
+    observers = table->getAll();
+    ui->tableWidget->setRowCount(observers.size());
+    int row = 0;
+    for (const auto& o : observers)
+    {
+      ui->tableWidget->setItem(row,0,new QTableWidgetItem(QString::number(o.getId())));
+      ui->tableWidget->item(row,0)->setFlags(ui->tableWidget->item(row,0)->flags()^Qt::ItemIsEditable);
+      ui->tableWidget->setItem(row,1,new QTableWidgetItem(QString::fromStdString(o.getName())));
+      ++row;
+    }
   }
   updating = false;
 }
@@ -180,20 +189,23 @@ void DatabaseDialog::updateObserverTable()
 void DatabaseDialog::updateTelescopeTable()
 {
   updating = true;
-  auto db = astrodb::Database::get();
-  auto table = db->getTelescopeTable();
   ui->tableWidget->clearContents();
-  telescopes = table->getAll();
-  ui->tableWidget->setRowCount(telescopes.size());
-  int row = 0;
-  for (const auto& t : telescopes)
+  auto db = astrodb::Database::get();
+  if (db)
   {
-    ui->tableWidget->setItem(row,0,new QTableWidgetItem(QString::number(t.getId())));
-    ui->tableWidget->item(row,0)->setFlags(ui->tableWidget->item(row,0)->flags()^Qt::ItemIsEditable);
-    ui->tableWidget->setItem(row,1,new QTableWidgetItem(QString::fromStdString(t.getModel())));
-    ui->tableWidget->setItem(row,2,new QTableWidgetItem(QString::number(t.getFocalLength()*1000.0)));
-    ui->tableWidget->setItem(row,3,new QTableWidgetItem(QString::number(t.getAperture()*1000.0)));
-    ++row;
+    auto table = db->getTelescopeTable();
+    telescopes = table->getAll();
+    ui->tableWidget->setRowCount(telescopes.size());
+    int row = 0;
+    for (const auto& t : telescopes)
+    {
+      ui->tableWidget->setItem(row,0,new QTableWidgetItem(QString::number(t.getId())));
+      ui->tableWidget->item(row,0)->setFlags(ui->tableWidget->item(row,0)->flags()^Qt::ItemIsEditable);
+      ui->tableWidget->setItem(row,1,new QTableWidgetItem(QString::fromStdString(t.getModel())));
+      ui->tableWidget->setItem(row,2,new QTableWidgetItem(QString::number(t.getFocalLength()*1000.0)));
+      ui->tableWidget->setItem(row,3,new QTableWidgetItem(QString::number(t.getAperture()*1000.0)));
+      ++row;
+    }
   }
   updating = false;
 }
@@ -208,48 +220,54 @@ void DatabaseDialog::info()
 void DatabaseDialog::addItem()
 {
   auto db = astrodb::Database::get();
-  switch (currentTable)
+  if (db)
   {
-    case 0:
-      db->getCameraTable()->add(astrodb::Camera("",0,0));
-      break;
-    case 1:
-      db->getObjectTable()->add(astrodb::Object(""));
-      break;
-    case 2:
-      db->getObserverTable()->add(astrodb::Observer(""));
-      break;
-    case 3:
-      db->getTelescopeTable()->add(astrodb::Telescope("",0,0));
-      break;
+    switch (currentTable)
+    {
+      case 0:
+        db->getCameraTable()->add(astrodb::Camera("",0,0));
+        break;
+      case 1:
+        db->getObjectTable()->add(astrodb::Object(""));
+        break;
+      case 2:
+        db->getObserverTable()->add(astrodb::Observer(""));
+        break;
+      case 3:
+        db->getTelescopeTable()->add(astrodb::Telescope("",0,0));
+        break;
+    }
+    refresh();
   }
-  refresh();
 }
 
 void DatabaseDialog::removeItems()
 {
   auto db = astrodb::Database::get();
-  auto selection = ui->tableWidget->selectionModel()->selectedRows();
-  for (const auto& index : selection)
+  if (db)
   {
-    int row = index.row();
-    switch (currentTable)
+    auto selection = ui->tableWidget->selectionModel()->selectedRows();
+    for (const auto& index : selection)
     {
-      case 0:
-        db->getCameraTable()->remove(cameras[row].getModel());
-        break;
-      case 1:
-        db->getObjectTable()->remove(objects[row].getName());
-        break;
-      case 2:
-        db->getObserverTable()->remove(observers[row].getName());
-        break;
-      case 3:
-        db->getTelescopeTable()->remove(telescopes[row].getModel());
-        break;
+      int row = index.row();
+      switch (currentTable)
+      {
+        case 0:
+          db->getCameraTable()->remove(cameras[row].getModel());
+          break;
+        case 1:
+          db->getObjectTable()->remove(objects[row].getName());
+          break;
+        case 2:
+          db->getObserverTable()->remove(observers[row].getName());
+          break;
+        case 3:
+          db->getTelescopeTable()->remove(telescopes[row].getModel());
+          break;
+      }
     }
+    updateTable();
   }
-  updateTable();
 }
 
 void DatabaseDialog::cellChanged(int row, int col)
@@ -297,7 +315,10 @@ void DatabaseDialog::cameraChanged(int row, int col)
       c.setSensorHeight(c.getPixelHeight()*c.getHeight());
       break;
   }
-  astrodb::Database::get()->getCameraTable()->update(c);
+  if (astrodb::Database::get())
+  {
+    astrodb::Database::get()->getCameraTable()->update(c);
+  }
 }
 
 void DatabaseDialog::objectChanged(int row, int col)
@@ -307,7 +328,10 @@ void DatabaseDialog::objectChanged(int row, int col)
   {
     o.setName(ui->tableWidget->item(row,col)->text().toStdString());
   }
-  astrodb::Database::get()->getObjectTable()->update(o);
+  if (astrodb::Database::get())
+  {
+    astrodb::Database::get()->getObjectTable()->update(o);
+  }
 }
 
 void DatabaseDialog::observerChanged(int row, int col)
@@ -317,7 +341,10 @@ void DatabaseDialog::observerChanged(int row, int col)
   {
     o.setName(ui->tableWidget->item(row,col)->text().toStdString());
   }
-  astrodb::Database::get()->getObserverTable()->update(o);
+  if (astrodb::Database::get())
+  {
+    astrodb::Database::get()->getObserverTable()->update(o);
+  }
 }
 
 void DatabaseDialog::telescopeChanged(int row, int col)
@@ -335,6 +362,9 @@ void DatabaseDialog::telescopeChanged(int row, int col)
   {
     t.setAperture(ui->tableWidget->item(row,col)->text().toDouble()*1.0E-3);
   }
-  astrodb::Database::get()->getTelescopeTable()->update(t);
+  if (astrodb::Database::get())
+  {
+    astrodb::Database::get()->getTelescopeTable()->update(t);
+  }
 }
 

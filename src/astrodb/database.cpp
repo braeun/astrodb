@@ -77,6 +77,7 @@ Database* Database::get(const std::string& con)
   {
     return databases.at(con).get();
   }
+  std::cout << "Failed to get database" << std::endl;
   return nullptr;
 }
 

@@ -105,6 +105,12 @@ bool TelescopeTableQt::add(Telescope c)
 {
   QSqlDatabase db = QSqlDatabase::database(con);
   if (!(db.isValid() && db.isOpen())) return false;
+  if (c.getModel().empty())
+  {
+    auto duration = std::chrono::system_clock::now().time_since_epoch();
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+    c.setModel("Telescope "+std::to_string(ms));
+  }
   QSqlQuery q(db);
   q.prepare("INSERT INTO Telescopes (model,focallength,aperture) VALUES (?,?,?)");
   q.bindValue(0,QString::fromStdString(c.getModel()));
@@ -146,7 +152,7 @@ bool TelescopeTableQt::remove(const std::string& name)
   QSqlDatabase db = QSqlDatabase::database(con);
   if (!(db.isValid() && db.isOpen())) return false;
   QSqlQuery q(db);
-  q.prepare("DELETE * FROM Telescopes where model=?");
+  q.prepare("DELETE FROM Telescopes where model=?");
   q.bindValue(0,QString::fromStdString(name));
   bool ret = q.exec();
   lastError = q.lastError().text();
@@ -163,7 +169,7 @@ bool TelescopeTableQt::remove(int64_t id)
   QSqlDatabase db = QSqlDatabase::database(con);
   if (!(db.isValid() && db.isOpen())) return false;
   QSqlQuery q(db);
-  q.prepare("DELETE * FROM Telescopes where id=?");
+  q.prepare("DELETE FROM Telescopes where id=?");
   q.bindValue(0,(qlonglong)id);
   bool ret = q.exec();
   lastError = q.lastError().text();

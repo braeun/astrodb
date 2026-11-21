@@ -1,8 +1,8 @@
 #ifndef ASTRODB_SQLITE3TELESCOPETABLE_H
 #define ASTRODB_SQLITE3TELESCOPETABLE_H
 
-#include "../telescopetable.h"
-#include "../data/telescope.h"
+#include <astrodb/telescopetable.h>
+#include <astrodb/data/telescope.h>
 #include <sqlite3.h>
 
 namespace astrodb {
@@ -15,17 +15,19 @@ public:
 
   virtual bool contains(const std::string& id) override;
 
-  virtual std::vector<std::string> getIdList() override;
+  virtual std::vector<std::string> getNameList() override;
 
   virtual std::vector<Telescope> getAll() override;
 
   virtual Telescope get(const std::string& id) override;
 
-  virtual bool add(const Telescope& c) override;
+  virtual bool add(Telescope c) override;
 
   virtual bool update(const Telescope& c) override;
 
   virtual bool remove(const std::string& id) override;
+
+  virtual bool remove(int64_t id) override;
 
 private:
   void assertTable();

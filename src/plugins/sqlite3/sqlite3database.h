@@ -1,7 +1,7 @@
 #ifndef ASTRODB_SQLITE3DATABASE_H
 #define ASTRODB_SQLITE3DATABASE_H
 
-#include "../database.h"
+#include <astrodb/database.h>
 #include <sqlite3.h>
 #include <memory>
 #include <string>
@@ -10,6 +10,7 @@ namespace astrodb {
 
 class CameraTable;
 class Sqlite3CameraTable;
+class Sqlite3InfoSnippetTable;
 class Sqlite3ObjectTable;
 class Sqlite3ObserverTable;
 class Sqlite3TelescopeTable;
@@ -23,6 +24,12 @@ public:
   Sqlite3Database(const std::string& filename);
   ~Sqlite3Database();
 
+  virtual std::string getBackend() const override;
+
+  virtual std::string getName() const override;
+
+  virtual void commit() override;
+
   virtual CameraTable* getCameraTable() override;
 
   virtual ObjectTable* getObjectTable() override;
@@ -31,12 +38,18 @@ public:
 
   virtual TelescopeTable* getTelescopeTable() override;
 
+  virtual InfoSnippetTable* getInfoSnippetTable() override;
+
 private:
+  void setupSQLite(const std::string& filename);
+
+  std::string filename;
   sqlite3* db;
   std::unique_ptr<Sqlite3CameraTable> cameraTable;
   std::unique_ptr<Sqlite3ObjectTable> objectTable;
   std::unique_ptr<Sqlite3ObserverTable> observerTable;
   std::unique_ptr<Sqlite3TelescopeTable> telescopeTable;
+  std::unique_ptr<Sqlite3InfoSnippetTable> infoSnippetTable;
 };
 
 } // namespace astrodb

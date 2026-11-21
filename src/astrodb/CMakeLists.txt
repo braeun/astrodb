@@ -7,7 +7,9 @@ add_library(astrodb-base SHARED
   objecttable.cpp
   observertable.cpp
   plugin.cpp
+  settings.cpp
   telescopetable.cpp
+  utils.cpp
   data/camera.cpp
   data/infosnippet.cpp
   data/object.cpp
@@ -21,7 +23,6 @@ add_library(astrodb-base SHARED
   memory/memoryobjecttable.h memory/memoryobjecttable.cpp
   memory/memoryobservertable.h memory/memoryobservertable.cpp
   memory/memorytelescopetable.h memory/memorytelescopetable.cpp
-  utils.h utils.cpp
 )
 
 add_library(astrodb::astrodb-base ALIAS astrodb-base)
@@ -34,7 +35,9 @@ target_sources(astrodb-base PUBLIC
   objecttable.h
   observertable.h
   plugin.h
+  settings.h
   telescopetable.h
+  utils.h
   data/camera.h
   data/infosnippet.h
   data/object.h

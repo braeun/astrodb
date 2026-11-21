@@ -1,11 +1,15 @@
 
 add_library(astrodb-guiqt
+  connectionconfigurationwidget.cpp connectionconfigurationwidget.ui
   databasedialog.cpp databasedialog.ui
   dbinfodialog.cpp dbinfodialog.ui
 )
 
+add_library(astrodb::astrodb-guiqt ALIAS astrodb-guiqt)
+
 target_sources(astrodb-guiqt PUBLIC
   FILE_SET HEADERS TYPE HEADERS BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/.." FILES
+  connectionconfigurationwidget.h
   databasedialog.h
   dbinfodialog.h
 )
@@ -24,7 +28,7 @@ set_target_properties(astrodb-guiqt
       SOVERSION
         ${CMAKE_PROJECT_VERSION_MAJOR} #.${CMAKE_PROJECT_VERSION_MINOR}
       DEFINE_SYMBOL
-        LIBASTRODB
+        LIBASTRODBGUIQT
 )
 
 
@@ -58,7 +62,7 @@ set(project_config_in "${CMAKE_CURRENT_LIST_DIR}/astrodb-guiqtConfig.cmake.in")
 set(project_config_out "${CMAKE_CURRENT_BINARY_DIR}/astrodb-guiqtConfig.cmake")
 export(TARGETS astrodb-guiqt NAMESPACE astrodb::
        FILE "${CMAKE_CURRENT_BINARY_DIR}/${config_targets_file}")
-install(EXPORT astrodb DESTINATION ${export_dest_dir} NAMESPACE astrodb:: FILE ${config_targets_file})
+install(EXPORT astrodb-guiqt DESTINATION ${export_dest_dir} NAMESPACE astrodb:: FILE ${config_targets_file})
 include(CMakePackageConfigHelpers)
 configure_package_config_file("${project_config_in}" "${project_config_out}" INSTALL_DESTINATION ${export_dest_dir})
 write_basic_package_version_file("${version_config_file}" COMPATIBILITY SameMajorVersion)
